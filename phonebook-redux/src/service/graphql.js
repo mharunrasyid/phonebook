@@ -19,7 +19,7 @@ export const loadPhonebooks = (name, phone) => {
             }
         }`;
 
-    return client.query({ query: GET_PHONEBOOKS,  variables: { name, phone }})
+    return client.query({ query: GET_PHONEBOOKS, variables: { name, phone }, fetchPolicy: "no-cache"})
         .then(response => response.data.getPhonebooks).catch(err => {
             throw err
         })
@@ -38,7 +38,7 @@ export const addPhonebook = (name, phone) => {
             }
         }`;
 
-    return client.mutate({ mutation: ADD_PHONEBOOK,  variables: { name, phone } })
+    return client.mutate({ mutation: ADD_PHONEBOOK, variables: { name, phone }, fetchPolicy: "no-cache" })
         .then(response => response.data.createPhonebook).catch(err => {
             throw err
         })
@@ -57,7 +57,7 @@ export const updatePhonebook = (id, name, phone) => {
             }
         }`;
 
-    return client.mutate({ mutation: UPDATE_PHONEBOOK,  variables: { id, name, phone }} )
+    return client.mutate({ mutation: UPDATE_PHONEBOOK, variables: { id, name, phone }, fetchPolicy: "no-cache" })
         .then(response => response.data.updatePhonebook).catch(err => {
             throw err
         })
@@ -76,7 +76,7 @@ export const removePhonebook = (id, name, phone) => {
             }
         }`;
 
-    return client.mutate({ mutation: REMOVE_PHONEBOOK,  variables: { id, name, phone }} )
+    return client.mutate({ mutation: REMOVE_PHONEBOOK, variables: { id, name, phone }, fetchPolicy: "no-cache" })
         .then(response => response.data.deletePhonebook).catch(err => {
             throw err
         })

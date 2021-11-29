@@ -22,6 +22,7 @@ export default function PhonebookForm(props) {
             setName("");
             setPhone("");
             props.setOnAdd(false)
+            props.searchReset()
         }
 
         event.preventDefault();

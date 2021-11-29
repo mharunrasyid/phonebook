@@ -13,6 +13,12 @@ export default function PhonebookBox() {
     const addPhonebookClick = (value) => {
         setOnAdd(value)
     }
+    
+    const searchReset = () => {
+        setData({})
+        setName("")
+        setPhone("")
+    }
 
     const enterSearch = (event) => {
         if (event.key === 'Enter') {
@@ -50,7 +56,7 @@ export default function PhonebookBox() {
                         <i className="fas fa-plus me-2"></i>
                         add
                     </button>}
-                    {onAdd && <PhonebookForm setOnAdd={addPhonebookClick} />}
+                    {onAdd && <PhonebookForm setOnAdd={addPhonebookClick} searchReset={searchReset} />}
                     <div className="card form-card">
                         <div className="card-header" style={{ "padding": "15px 20px" }}>
                             Search Form
@@ -66,7 +72,7 @@ export default function PhonebookBox() {
                             </label>
                         </div>
                     </div>
-                    <PhonebookTable searchData={data} />
+                    <PhonebookTable searchData={data} searchReset={searchReset} />
                 </div>
             </main>
         </div>

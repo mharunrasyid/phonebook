@@ -13,7 +13,7 @@ export default function PhonebookTable(props) {
 
     useEffect(() => {
         dispatch(loadPhonebook(props.searchData.name ? props.searchData.name : "", props.searchData.phone ? props.searchData.phone : ""))
-    }, [dispatch])
+    }, [dispatch, props.searchData.name, props.searchData.phone])
 
     const nodeList = phonebooks.map((item, index) => (
         <PhonebookItem
@@ -21,10 +21,9 @@ export default function PhonebookTable(props) {
             index={index}
             id={item.id}
             name={item.name}
-            phone={item.phone} />
+            phone={item.phone}
+            searchReset={props.searchReset} />
     ))
-
-    // console.log(props.searchData);
     
     return (
         <table className="table table-striped">

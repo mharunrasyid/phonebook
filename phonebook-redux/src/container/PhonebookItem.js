@@ -28,6 +28,7 @@ export default function PhonebookItem(props) {
         if (name !== "" && phone !== "") {
             update()
             setOnEdit(false)
+            props.searchReset()
         }
     }
 
@@ -35,6 +36,11 @@ export default function PhonebookItem(props) {
         setName(props.name)
         setPhone(props.phone)
         setOnEdit(false)
+    }
+
+    const removeData = () => {
+        remove()
+        props.searchReset()
     }
 
 
@@ -71,7 +77,7 @@ export default function PhonebookItem(props) {
                         <i className="fas fa-pen me-2"></i>
                         edit
                     </button>
-                    <button type="submit" className="btn btn-danger" onClick={remove}>
+                    <button type="submit" className="btn btn-danger" onClick={removeData}>
                         <i className="fas fa-trash-alt me-2"></i>
                         delete
                     </button>

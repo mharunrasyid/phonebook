@@ -10,7 +10,16 @@ const db = getFirestore();
 
 const getPhonebooks = async (data) => {
     try {
-        const phonebookSnapshot = db.collection('phonebook');
+        let phonebookSnapshot = db.collection('phonebook');
+        
+        if (data.name && data.phone) {
+            phonebookSnapshot = phonebookSnapshot.where('name', '==', data.name).where('phone', '==', data.phone)
+        } else if (data.name) {
+            phonebookSnapshot = phonebookSnapshot.where('name', '==', data.name)
+        } else if (data.phone) {
+            phonebookSnapshot = phonebookSnapshot.where('phone', '==', data.phone)
+        }
+
         const phonebookList = (await phonebookSnapshot.get()).docs.map(doc => doc.data()).sort(function (a, b) {
             return new Date(b.id) - new Date(a.id);
         });
