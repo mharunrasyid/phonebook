@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { removePhonebook, updatePhonebook } from '../actions/index';
+import { loadPhonebook, removePhonebook, updatePhonebook } from '../actions/index';
 import '../style.css';
 
 export default function PhonebookItem(props) {
@@ -13,6 +13,7 @@ export default function PhonebookItem(props) {
     const remove = useCallback(
         () => {
             dispatch(removePhonebook(props.id, name, phone));
+            dispatch(loadPhonebook("", "", 10, 0))
         },
         [dispatch, props.id, name, phone],
     );

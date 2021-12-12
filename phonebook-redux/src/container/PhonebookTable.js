@@ -1,21 +1,36 @@
 import '../style.css';
 import PhonebookItem from "./PhonebookItem"
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loadPhonebook } from '../actions'
+import { loadMorePhonebook, loadPhonebook } from '../actions'
 
 export default function PhonebookTable(props) {
     const { phonebooks } = useSelector(state => ({
         phonebooks: state.phonebooks
     }), shallowEqual)
 
+    const offsetRef = useRef(0)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(loadPhonebook(props.searchData.name ? props.searchData.name : "", props.searchData.phone ? props.searchData.phone : ""))
+        offsetRef.current = 0
+        dispatch(loadPhonebook(props.searchData.name ? props.searchData.name : "", props.searchData.phone ? props.searchData.phone : "", 10, offsetRef.current))
     }, [dispatch, props.searchData.name, props.searchData.phone])
 
-    const nodeList = phonebooks.map((item, index) => (
+    const handleScroll = useCallback(() => {
+        if (document.documentElement.scrollTop + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            if (offsetRef.current <= (Math.ceil(phonebooks.dataCount / 10) - 1)) {
+                offsetRef.current++
+                dispatch(loadMorePhonebook(props.searchData.name ? props.searchData.name : "", props.searchData.phone ? props.searchData.phone : "", 10, offsetRef.current))
+            }
+        }
+    }, [dispatch, phonebooks, props.searchData.name, props.searchData.phone])
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+    }, [handleScroll]);
+
+    const nodeList = phonebooks?.data?.map((item, index) => (
         <PhonebookItem
             key={item.id}
             index={index}
@@ -24,7 +39,7 @@ export default function PhonebookTable(props) {
             phone={item.phone}
             searchReset={props.searchReset} />
     ))
-    
+
     return (
         <table className="table table-striped">
             <thead>

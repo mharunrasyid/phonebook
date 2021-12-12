@@ -20,11 +20,24 @@ const getPhonebooks = async (data) => {
             phonebookSnapshot = phonebookSnapshot.where('phone', '==', data.phone)
         }
 
-        const phonebookList = (await phonebookSnapshot.get()).docs.map(doc => doc.data()).sort(function (a, b) {
+        if (data.offset > 0) {
+            data.offset = 10 * data.offset
+        }
+
+        const phonebookList = (await phonebookSnapshot.limit(data.limit).offset(data.offset).get()).docs.map(doc => doc.data()).sort(function (a, b) {
             return new Date(b.id) - new Date(a.id);
         });
 
-        return phonebookList
+        const phonebookListAll = (await phonebookSnapshot.get()).docs.map(doc => doc.data()).sort(function (a, b) {
+            return new Date(b.id) - new Date(a.id);
+        });
+
+        const dataPhone = {
+            data: [...phonebookList],
+            dataCount: phonebookListAll.length
+        }
+
+        return dataPhone
     } catch (err) {
         console.log(err);
     }

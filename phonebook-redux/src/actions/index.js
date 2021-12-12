@@ -1,6 +1,8 @@
 import {
     LOAD_PHONEBOOK_SUCCESS,
     LOAD_PHONEBOOK_FAILURE,
+    LOAD_MORE_PHONEBOOK_SUCCESS,
+    LOAD_MORE_PHONEBOOK_FAILURE,
     ADD_PHONEBOOK_SUCCESS,
     ADD_PHONEBOOK_FAILURE,
     UPDATE_PHONEBOOK_SUCCESS,
@@ -11,24 +13,46 @@ import {
 
 import * as GraphQl from "../service/graphql";
 
-const loadPhonebookSuccess = (phonebooks) => ({
+const loadPhonebookSuccess = (response) => ({
     type: LOAD_PHONEBOOK_SUCCESS,
-    phonebooks
+    response
 })
 
 const loadPhonebookFailure = () => ({
     type: LOAD_PHONEBOOK_FAILURE
 })
 
-export const loadPhonebook = (name, phone) => {
+export const loadPhonebook = (name, phone, limit, offset) => {
     return dispatch => {
-        return GraphQl.loadPhonebooks(name, phone)
+        return GraphQl.loadPhonebooks(name, phone, limit, offset)
             .then(function (response) {
                 dispatch(loadPhonebookSuccess(response))
             })
             .catch(function (error) {
                 console.error(error);
                 dispatch(loadPhonebookFailure())
+            });
+    }
+}
+
+const loadMorePhonebookSuccess = (response) => ({
+    type: LOAD_MORE_PHONEBOOK_SUCCESS,
+    response
+})
+
+const loadMorePhonebookFailure = () => ({
+    type: LOAD_MORE_PHONEBOOK_FAILURE
+})
+
+export const loadMorePhonebook = (name, phone, limit, offset) => {
+    return dispatch => {
+        return GraphQl.loadPhonebooks(name, phone, limit, offset)
+            .then(function (response) {
+                dispatch(loadMorePhonebookSuccess(response))
+            })
+            .catch(function (error) {
+                console.error(error);
+                dispatch(loadMorePhonebookFailure())
             });
     }
 }

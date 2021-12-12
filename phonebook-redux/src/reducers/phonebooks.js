@@ -1,6 +1,8 @@
 import {
     LOAD_PHONEBOOK_SUCCESS,
     LOAD_PHONEBOOK_FAILURE,
+    LOAD_MORE_PHONEBOOK_SUCCESS,
+    LOAD_MORE_PHONEBOOK_FAILURE,
     ADD_PHONEBOOK_SUCCESS,
     ADD_PHONEBOOK_FAILURE,
     UPDATE_PHONEBOOK_SUCCESS,
@@ -9,23 +11,38 @@ import {
     REMOVE_PHONEBOOK_FAILURE,
 } from '../constant'
 
-const phonebooks = (state = [], action) => {
+const phonebooks = (state = {}, action) => {
     switch (action.type) {
         case LOAD_PHONEBOOK_SUCCESS:
-            return action.phonebooks
+            return {
+                data: action.response.data,
+                dataCount: action.response.dataCount
+            }
+
+        case LOAD_MORE_PHONEBOOK_SUCCESS:
+            return {
+                data: [
+                    ...state.data,
+                    ...action.response.data
+                ],
+                dataCount: action.response.dataCount
+            }
 
         case ADD_PHONEBOOK_SUCCESS:
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    name: action.name,
-                    phone: action.phone
-                }
-            ]
+            return {
+                data: [
+                    ...state.data,
+                    {
+                        id: action.id,
+                        name: action.name,
+                        phone: action.phone
+                    }
+                ],
+                dataCount: state.dataCount
+            }
 
         case UPDATE_PHONEBOOK_SUCCESS:
-            return state.map(item => {
+            let dataEdit = state.data.map(item => {
                 if (item.id === action.id) {
                     item.name = action.name
                     item.phone = action.phone
@@ -34,10 +51,20 @@ const phonebooks = (state = [], action) => {
                 return item
             })
 
+            return {
+                data: [...dataEdit],
+                dataCount: state.dataCount
+            }
+
         case REMOVE_PHONEBOOK_SUCCESS:
-            return state.filter(item => action.id !== item.id)
+            let dataDelete = state.data.filter(item => action.id !== item.id)
+            return {
+                data: [...dataDelete],
+                dataCount: state.dataCount
+            }
 
         case LOAD_PHONEBOOK_FAILURE:
+        case LOAD_MORE_PHONEBOOK_FAILURE:
         case ADD_PHONEBOOK_FAILURE:
         case UPDATE_PHONEBOOK_FAILURE:
         case REMOVE_PHONEBOOK_FAILURE:

@@ -13,7 +13,7 @@ export default function PhonebookBox() {
     const addPhonebookClick = (value) => {
         setOnAdd(value)
     }
-    
+
     const searchReset = () => {
         setData({})
         setName("")

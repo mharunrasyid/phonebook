@@ -7,14 +7,26 @@ var schema = buildSchema(`
     phone: String!
   }
 
+  input GetPhonebookInput {
+    name: String!
+    phone: String!
+    limit: Int!
+    offset: Int!
+  }
+
   type Phonebook {
     id: String!
     name: String!
     phone: String!
   }
 
+  type PhonebookGet {
+    data: [Phonebook]!
+    dataCount: Int
+  }
+
   type Query {
-    getPhonebooks(input: PhonebookInput): [Phonebook]
+    getPhonebooks(input: GetPhonebookInput): PhonebookGet
   }
 
   type Mutation {

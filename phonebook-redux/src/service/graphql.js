@@ -6,20 +6,25 @@ const client = new ApolloClient({
 });
 
 
-export const loadPhonebooks = (name, phone) => {
+export const loadPhonebooks = (name, phone, limit, offset) => {
     const GET_PHONEBOOKS = gql`
-    query getPhonebooks($name: String!, $phone: String!) {
+    query getPhonebooks($name: String!, $phone: String!, $limit: Int!, $offset: Int!) {
             getPhonebooks(input: {
                 name: $name,
                 phone: $phone
+                limit: $limit,
+                offset: $offset
             }) {
-                id
-                name,
-                phone
+                data {
+                    id,
+                    name,
+                    phone
+                  },
+                  dataCount
             }
         }`;
 
-    return client.query({ query: GET_PHONEBOOKS, variables: { name, phone }, fetchPolicy: "no-cache"})
+    return client.query({ query: GET_PHONEBOOKS, variables: { name, phone, limit, offset }, fetchPolicy: "no-cache" })
         .then(response => response.data.getPhonebooks).catch(err => {
             throw err
         })

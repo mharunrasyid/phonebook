@@ -1,7 +1,7 @@
 import '../style.css';
 import React, { useCallback, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { addPhonebook } from '../actions'
+import { addPhonebook, loadPhonebook } from '../actions'
 
 export default function PhonebookForm(props) {
     const [name, setName] = useState("")
@@ -12,6 +12,7 @@ export default function PhonebookForm(props) {
     const add = useCallback(
         () => {
             dispatch(addPhonebook(name, phone))
+            dispatch(loadPhonebook("", "", 10, 0))
         },
         [dispatch, name, phone],
     );
